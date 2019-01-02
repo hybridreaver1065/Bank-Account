@@ -33,7 +33,13 @@ public class CheckingAccount extends BankAccount {
 	}
 	
 	public void deposit(double amt) {
-		super.deposit(amt);
+		if ( amt < 0) {
+			throw new IllegalArgumentException();
+		}	
+		else {
+				
+			super.deposit(amt);
+		}
 		
 		numTransactions++;
 		if (FREE_TRANS < numTransactions) {
@@ -43,26 +49,29 @@ public class CheckingAccount extends BankAccount {
 	}
 	
 	public void withdraw(double amt) {
-		if (getBalance() < 0) {
+		
+		if (getBalance() < 0 || amt < 0) {
 			throw new IllegalArgumentException();
 		}
 		else {
-			super.deposit(amt);
+			super.withdraw(amt);
 			
 			numTransactions++;
+		
 			
-			if (getBalance() < 0) {
-				super.withdraw(OVER_DRAFT_FEE);
-			}
 			if (FREE_TRANS < numTransactions) {
 				super.withdraw(TRANSACTION_FEE);
+			}
+			if (getBalance() < 0|| amt < 0) {
+				super.withdraw(OVER_DRAFT_FEE);
 			}
 		}
 		
 	}
 	
-	public void transfer(double amt) {
-		if (getBalance() < amt) {
+	public void transfer(BankAccount other, double amt) {
+		if (other.getName().equals(this.getName())) {
+		if (getBalance() < amt || amt < 0) {
 			
 			throw new IllegalArgumentException();
 		}
@@ -70,14 +79,22 @@ public class CheckingAccount extends BankAccount {
 			super.deposit(amt);
 			
 			numTransactions++;
-			if (getBalance() < 0) {
-				super.withdraw(OVER_DRAFT_FEE);
-			}
+			
 			if (FREE_TRANS < numTransactions) {
 				super.withdraw(TRANSACTION_FEE);
 			}
+			if (getBalance() < 0) {
+				super.withdraw(OVER_DRAFT_FEE);
+			}
+		}
+		}
+		else  {
+			throw new IllegalArgumentException();	
 		}
 		
+	}
+	public void endOfMonthUpdate() {
+		numTransactions = 0;
 	}
 	
 }

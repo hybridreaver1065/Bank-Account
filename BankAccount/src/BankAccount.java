@@ -20,7 +20,12 @@ public class BankAccount {
 	}
 
 	public void deposit(double amt) {
+		if ( amt < 0) {
+			throw new IllegalArgumentException();
+		}
+		else	{
 			balance += amt;
+		}
 		
 		}
 		
@@ -28,13 +33,31 @@ public class BankAccount {
 
 
 	public void withdraw(double amt) {
-		if (amt < 0){
+		if (amt > 0){
 		balance -= amt;
 		}
-	
 	}
+	
+		
+	
+	public void transfer(BankAccount other, double amt) {
+		if (getBalance() < amt || amt < 0) {
+			
+			throw new IllegalArgumentException();
+		}
+		else {
+			other.deposit(amt);
+			withdraw(amt);
+			}
+	}
+	
+	
+	
 
-
+	public int getAccountNum() {
+		return acctNum;
+	}
+	
 	public String getName() {
 		return name;
 		

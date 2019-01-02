@@ -20,20 +20,27 @@ public class SavingsAccount extends BankAccount {
 		MIN_BAL = mb;
 		MIN_BAL_FEE = mbf;
 	}
+	public void balanceChecker() {
+		if (getBalance() < MIN_BAL) {
+			super.withdraw(MIN_BAL_FEE);
+		}
+	}
 	
 	public void withdraw(double amt) {
-		if (amt > super.getBalance()) {
+		if (amt > super.getBalance()|| amt < 0) {
 			throw new IllegalArgumentException();
 			//If not allowed to occur throw an IllegalArgumentException
 		}
 		else {
 			
 			super.withdraw(amt);
+			balanceChecker();
 		}
 	}
 	public void transfer(BankAccount other, double amt) {
-		if (other.equals(this)) {//transfer money to other account only if the accounts are both in the same name.
-			if (amt > super.getBalance() ) {
+	
+		if (other.getName().equals(this.getName())) {//transfer money to other account only if the accounts are both in the same name.
+			if (amt > super.getBalance() || amt < 0) {
 				
 				throw new IllegalArgumentException();
 				//balance cannot go negative.  **if a transaction is not allowed to occur, throw an IllegalArgumentException
@@ -41,9 +48,13 @@ public class SavingsAccount extends BankAccount {
 			else {
 			withdraw(amt);
 			other.deposit(amt);
+			balanceChecker();
 			}
+			
 		}
-		
+		else {
+				throw new IllegalArgumentException();
+		}
 	//Transaction fee would apply when transferred to a checking account.
 	
 	}
