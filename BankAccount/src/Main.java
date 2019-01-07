@@ -55,7 +55,7 @@ public class Main {
 				
 				
 				
-				//try catch this
+				//try catch this?
 				accounts.add(new SavingsAccount (name, RATE, MIN_BAL, MIN_BAL_FEE));
 				
 				System.out.println("Savings Account made for "+ name );
@@ -72,14 +72,11 @@ public class Main {
 				name = in.nextLine();
 				System.out.println("");
 				
-				//try catch this
+				//try catch this?
 				accounts.add(new CheckingAccount(name, OVER_DRAFT_FEE, TRANSACTION_FEE, FREE_TRANSACTIONS));
 				System.out.println("Checking Account made for "+ name );
 			}
 			
-		//If they elect to add an account, 
-		//input all necessary information including whether they would like to create a checking or savings account, 
-		//then add the account to the ArrayList.
 		}
 			
 		else if (response.equals("2")) {
@@ -141,11 +138,15 @@ public class Main {
 					
 					
 					//try catch this
-					withdraws.withdraw(amount);
+					try {withdraws.withdraw(amount); System.out.print(withdraws.getBalance());}
+					
+					catch (IllegalArgumentException e) {
+						System.out.println("This transaction is illegal");
+					}
 					
 					
 					
-					System.out.print(withdraws.getBalance());
+					
 				}
 			
 		}
@@ -182,8 +183,12 @@ public class Main {
 			for (BankAccount deposit:accounts) {
 				if (deposit.getAccountNum() == accountnumber) {
 					//try catch this
-					deposit.deposit(amount);
-					System.out.print(deposit.getBalance());
+					
+					try {deposit.deposit(amount);
+					System.out.print(deposit.getBalance());}
+					catch (IllegalArgumentException e) {
+						System.out.print("This transaction is illegal");
+					}
 				}
 			}
 		}
@@ -193,7 +198,7 @@ public class Main {
 		else if (transponse.toLowerCase().equals("t")){
 			int accNumW;
 			int accNumD;
-			String ans = "y";
+			String ans = "n";
 			
 			System.out.print("Transfering:");
 			
@@ -201,7 +206,10 @@ public class Main {
 			
 				System.out.println("Account Number(Transferrer):");
 				straccountnumber = in.nextLine();
-			while (!isNumeric(straccountnumber)&& ans.toLowerCase().equals("y")) {
+			while (!isNumeric(straccountnumber)&& ans.toLowerCase().equals("n")) {
+				System.out.println("Do you need help? (Y)es or (N)o");
+				
+				
 				System.out.println("Account Number(Transferrer):");
 				straccountnumber = in.nextLine();
 				
@@ -243,7 +251,11 @@ public class Main {
 				for (BankAccount transfer:accounts) {
 					if (transfer.getAccountNum() == accNumW) {
 						//Try catch this
-						transfer.transfer(depositor, amount);
+						try { transfer.transfer(depositor, amount); }
+						
+						catch (IllegalArgumentException e) {
+							System.out.print("This transaction is illegal");
+						}
 					}
 				}
 			}
@@ -310,7 +322,7 @@ public class Main {
 }
 
 
-
+	
 
 
 	private static boolean isNumeric(String str)
