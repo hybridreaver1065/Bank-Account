@@ -55,7 +55,7 @@ public class Main {
 				
 				
 				
-				
+				//try catch this
 				accounts.add(new SavingsAccount (name, RATE, MIN_BAL, MIN_BAL_FEE));
 				
 				System.out.println("Savings Account made for "+ name );
@@ -72,6 +72,7 @@ public class Main {
 				name = in.nextLine();
 				System.out.println("");
 				
+				//try catch this
 				accounts.add(new CheckingAccount(name, OVER_DRAFT_FEE, TRANSACTION_FEE, FREE_TRANSACTIONS));
 				System.out.println("Checking Account made for "+ name );
 			}
@@ -82,7 +83,7 @@ public class Main {
 		}
 			
 		else if (response.equals("2")) {
-				String	transponse;	
+				String transponse;	
 		
 		
 		//If the user elects to make a transaction, prompt as to whether they would like to Withdraw, deposit, transfer, or get account numbers.  
@@ -134,8 +135,12 @@ public class Main {
 			
 			
 			for (BankAccount withdraws:accounts)
+				//Finds the account matching
 				if (withdraws.getAccountNum() == accountnumber) {
-					//Finds the account matching
+					
+					
+					
+					//try catch this
 					withdraws.withdraw(amount);
 					
 					
@@ -149,7 +154,7 @@ public class Main {
 		//You will need to use the instanceof operator to display properly.
 		
 		else if (transponse.toLowerCase().equals("d")){
-		System.out.println("Depositing:");;
+		System.out.println("Depositing:");
 		
 		double accountnumber;
 		String straccountnumber;
@@ -176,6 +181,7 @@ public class Main {
 			
 			for (BankAccount deposit:accounts) {
 				if (deposit.getAccountNum() == accountnumber) {
+					//try catch this
 					deposit.deposit(amount);
 					System.out.print(deposit.getBalance());
 				}
@@ -191,12 +197,11 @@ public class Main {
 			
 			System.out.print("Transfering:");
 			
-			int accountnumber;
 			String straccountnumber;
 			
 				System.out.println("Account Number(Transferrer):");
 				straccountnumber = in.nextLine();
-			while (!isNumeric(straccountnumber)) {
+			while (!isNumeric(straccountnumber)&& ans.toLowerCase().equals("y")) {
 				System.out.println("Account Number(Transferrer):");
 				straccountnumber = in.nextLine();
 				
@@ -210,20 +215,45 @@ public class Main {
 			
 			System.out.println("Account Number(Transferree):");
 			straccountnumber = in.nextLine();
-		while (!isNumeric(straccountnumber)) {
+		
+		while (!isNumeric(straccountnumber)&& ans.toLowerCase().equals("n")) {
 			System.out.println("Account Number(Transferree):");
 			straccountnumber = in.nextLine();	
 		}
 		
 		accNumD = (int) Double.parseDouble(straccountnumber);
 		in.nextLine();
+		
+		String stramount;
+		double amount;
+		System.out.println("Amount:");
+		stramount = in.nextLine();
+		while (!isNumeric(stramount)) {
+			System.out.println("Amount:");
+			stramount = in.nextLine();	
+		}
+		
+		amount = (int) Double.parseDouble(stramount);
+		in.nextLine();
+		
+		
+		for (BankAccount depositor:accounts) {
 			
-			
+			if (depositor.getAccountNum() == accNumD) {
+				for (BankAccount transfer:accounts) {
+					if (transfer.getAccountNum() == accNumW) {
+						//Try catch this
+						transfer.transfer(depositor, amount);
+					}
+				}
+			}
+		
+		}
 			
 			
 
 			
-			
+		//End of transaction	
 		}
 		
 		else if (transponse.toLowerCase().equals("g")){

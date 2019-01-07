@@ -76,9 +76,10 @@ public class CheckingAccount extends BankAccount {
 			throw new IllegalArgumentException();
 		}
 		else {
-			super.deposit(amt);
+			other.deposit(amt);
 			
 			numTransactions++;
+			super.withdraw(amt);
 			
 			if (FREE_TRANS < numTransactions) {
 				super.withdraw(TRANSACTION_FEE);
