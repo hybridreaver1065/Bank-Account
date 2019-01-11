@@ -33,6 +33,7 @@ public class CheckingAccount extends BankAccount {
 	}
 	
 	public void deposit(double amt) {
+		//Can't be negative
 		if ( amt < 0) {
 			throw new IllegalArgumentException();
 		}	
@@ -69,6 +70,9 @@ public class CheckingAccount extends BankAccount {
 		
 	}
 	
+	/**
+	 * other is deposited into from this account
+	 */
 	public void transfer(BankAccount other, double amt) {
 		if (other.getName().equals(this.getName())) {
 		if (getBalance() < amt || amt < 0) {
@@ -77,9 +81,10 @@ public class CheckingAccount extends BankAccount {
 		}
 		else {
 			other.deposit(amt);
-			
-			numTransactions++;
+			//super so it doesn't run the withdraw method
 			super.withdraw(amt);
+			numTransactions++;
+			
 			
 			if (FREE_TRANS < numTransactions) {
 				super.withdraw(TRANSACTION_FEE);

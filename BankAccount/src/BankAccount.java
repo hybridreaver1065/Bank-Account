@@ -1,9 +1,12 @@
 
-public class BankAccount {
+public abstract class BankAccount {
 	static int nextAccNum;
 	private String name;
 	private int acctNum;
 	private double balance;
+	
+	
+	abstract void endOfMonthUpdate();
 	
 	public BankAccount(String n) {
 		name = n;
@@ -39,7 +42,11 @@ public class BankAccount {
 	}
 	
 		
-	
+	/**
+	 * 
+	 * @param other is deposited into from this one
+	 * @param amt is the amount withdrawn from this account
+	 */
 	public void transfer(BankAccount other, double amt) {
 		if (getBalance() < amt || amt < 0) {
 			

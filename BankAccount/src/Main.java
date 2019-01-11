@@ -4,6 +4,7 @@ import java.util.jar.Attributes.Name;
 
 public class Main {
 
+
 	public static void main(String[] args) {
 		
 		Scanner in = new Scanner(System.in);
@@ -32,7 +33,7 @@ public class Main {
 			System.out.println("Would you like to add an account(1), make a transaction(2), or terminate(3)?");
 			response = in.nextLine();
 		}
-		
+		//Making accounts
 		if (response.equals("1")) {
 			String transponse;
 			System.out.println("(S)avings or (C)hecking?");
@@ -48,21 +49,21 @@ public class Main {
 				System.out.print("Making savings account, ");
 				String name;
 
-				
+				//Prompts for name
 				System.out.print("Name:");
 				name = in.nextLine();
 				System.out.println("");
 				
 				
 				
-				//try catch this?
+				//Makes the account
 				accounts.add(new SavingsAccount (name, RATE, MIN_BAL, MIN_BAL_FEE));
 				
 				System.out.println("Savings Account made for "+ name );
 				
 				
 			}
-				
+				//Checking Account
 			else if (transponse.toLowerCase().equals("c")) {
 				System.out.print("Making checking account, ");
 				System.out.println("Please enter the");
@@ -72,7 +73,7 @@ public class Main {
 				name = in.nextLine();
 				System.out.println("");
 				
-				//try catch this?
+				//Makes account
 				accounts.add(new CheckingAccount(name, OVER_DRAFT_FEE, TRANSACTION_FEE, FREE_TRANSACTIONS));
 				System.out.println("Checking Account made for "+ name );
 			}
@@ -84,8 +85,7 @@ public class Main {
 		
 		
 		//If the user elects to make a transaction, prompt as to whether they would like to Withdraw, deposit, transfer, or get account numbers.  
-		//Use a switch case to handle the response.
-			
+		
 			System.out.println("(W)ithdraw, (d)eposit, (t)ransfer, or (g)et account numbers?");
 			transponse = in.nextLine();
 		
@@ -93,11 +93,11 @@ public class Main {
 			
 			while (!transponse.toLowerCase().equals("w") &&! transponse.toLowerCase().equals("d") && !transponse.toLowerCase().equals("t") && !transponse.toLowerCase().equals("g")) {
 				System.out.println("(W)ithdraw, (d)eposit, (t)ransfer, or (g)et account numbers?");
-				response = in.nextLine();
+				transponse = in.nextLine();
 			}
 		
 		//For deposit, withdraw and transfer, prompt the user for all necessary information and perform the transactions.   Use the Account Number to identify the account
-		//Use a try catch to catch any IllegalArgumentExceptions and display the message “transaction not authorized” whenever an exception appears.
+		
 			
 		if (transponse.toLowerCase().equals("w")) {
 			System.out.println("Withdrawing:");
@@ -110,6 +110,32 @@ public class Main {
 			
 				
 				while (!isNumeric(straccountnumber)) {
+					String ans;
+					System.out.println("Do you need help? (Y)es or (N)o");
+					ans = in.nextLine();
+					
+					//help loop
+					if (ans.toLowerCase().equals("y")) {
+						boolean didSomething = false;
+						String name;
+						while (didSomething == false) {
+							//keeps running until an account name is found
+						System.out.println("What is the name? (C)ancel:");
+						name = in.nextLine();
+						
+						for (BankAccount names:accounts) {
+							
+							if (names.getName().equals(name)) {
+								System.out.println("The account number is"+names.getAccountNum());
+								didSomething = true;
+							}
+							else if (name.toLowerCase().equals("c")) {
+								didSomething = true;
+								//Can cancel if name is forgotten
+							}
+						}
+						}
+					}
 				System.out.println("Account Number:");
 				straccountnumber = in.nextLine();
 				
@@ -118,10 +144,13 @@ public class Main {
 			
 			System.out.println("Amount:");
 			double amount;
+			
+			//For parsing
 			String stramount;
 			
 			stramount = in.nextLine();
 			while (!isNumeric(stramount)) {
+				//Reprompts until a number is entered
 				System.out.println("Amount:");
 				stramount = in.nextLine();
 				
@@ -137,7 +166,7 @@ public class Main {
 					
 					
 					
-					//try catch this
+					//Use a try catch to catch any IllegalArgumentExceptions and display the message “transaction not authorized” whenever an exception appears.
 					try {withdraws.withdraw(amount); System.out.print(withdraws.getBalance());}
 					
 					catch (IllegalArgumentException e) {
@@ -152,17 +181,47 @@ public class Main {
 		}
 		
 		//If when you prompt for an account number, an invalid account number is entered, give the user the option to reenter their account number or get their account numbers(enter their name and return each of their accounts and whether it is checking or savings).  
-		//You will need to use the instanceof operator to display properly.
+	
 		
 		else if (transponse.toLowerCase().equals("d")){
 		System.out.println("Depositing:");
 		
 		double accountnumber;
+		//For parsing
 		String straccountnumber;
 		
 			System.out.print("Account Number:");
 			straccountnumber = in.nextLine();
+			
 		while (!isNumeric(straccountnumber)) {
+			
+			//Every time the user enters a non-numeric value, they are prompted for help
+			String ans;
+			System.out.println("Do you need help? (Y)es or (N)o");
+			ans = in.nextLine();
+			if (ans.toLowerCase().equals("y")) {
+				boolean didSomething = false;
+				String name;
+				while (didSomething == false) {
+					//prompts for name until a real name is entered
+				System.out.println("What is the name? (C)ancel:");
+				name = in.nextLine();
+				
+				for (BankAccount names:accounts) {
+					
+					if (names.getName().equals(name)) {
+						System.out.println("The account number is"+names.getAccountNum());
+						didSomething = true;
+					}
+					else if (name.toLowerCase().equals("c")) {
+						//Allows to cancel if the real name is forgotten
+						didSomething = true;
+					}
+				}
+				}
+			}
+			
+			
 			System.out.println("Account Number:");
 			straccountnumber = in.nextLine();
 		}
@@ -172,7 +231,7 @@ public class Main {
 			System.out.print("Amount:");
 			double amount;
 			String stramount;
-			
+			boolean didSomething = false;
 			stramount = in.nextLine();
 			while (!isNumeric(stramount)) {
 				System.out.print("Amount:");
@@ -185,7 +244,8 @@ public class Main {
 					//try catch this
 					
 					try {deposit.deposit(amount);
-					System.out.print(deposit.getBalance());}
+					System.out.print("The total amount is" +deposit.getBalance());
+					didSomething = true;}
 					catch (IllegalArgumentException e) {
 						System.out.print("This transaction is illegal");
 					}
@@ -200,18 +260,42 @@ public class Main {
 			int accNumD;
 			String ans = "n";
 			
-			System.out.print("Transfering:");
+			System.out.print("Transferring:");
 			
 			String straccountnumber;
 			
 				System.out.println("Account Number(Transferrer):");
 				straccountnumber = in.nextLine();
-			while (!isNumeric(straccountnumber)&& ans.toLowerCase().equals("n")) {
+			while (!isNumeric(straccountnumber)) {
+				
+				//Help loop
 				System.out.println("Do you need help? (Y)es or (N)o");
-				
-				
-				System.out.println("Account Number(Transferrer):");
-				straccountnumber = in.nextLine();
+				ans = in.nextLine();
+				if (ans.toLowerCase().equals("y")) {
+					boolean didSomething = false;
+					String name;
+					while (didSomething == false) {
+					System.out.println("What is the name? (C)ancel:");
+					name = in.nextLine();
+					
+					for (BankAccount names:accounts) {
+						
+						if (names.getName().equals(name)) {
+							System.out.println("The account number is"+names.getAccountNum());
+							didSomething = true;
+						}
+						else if (name.toLowerCase().equals("c")) {
+							didSomething = true;
+							//Can be  canceled if real name is forgotten
+						}
+					}
+					}
+				}
+				else {
+					System.out.println("Account Number(Transferrer):");
+					//User re enters and if it's numeric  it's parsed
+					straccountnumber = in.nextLine();
+					}
 				
 			}
 			accNumW = (int) Double.parseDouble(straccountnumber);
@@ -224,18 +308,46 @@ public class Main {
 			System.out.println("Account Number(Transferree):");
 			straccountnumber = in.nextLine();
 		
-		while (!isNumeric(straccountnumber)&& ans.toLowerCase().equals("n")) {
+		while (!isNumeric(straccountnumber)) {
+			
+			//help loop
+			System.out.println("Do you need help? (Y)es or (N)o");
+			ans = in.nextLine();
+			if (ans.toLowerCase().equals("y")) {
+				boolean didSomething = false;
+				String name;
+				while (didSomething == false) {
+				System.out.println("What is the name? (C)ancel:");
+				name = in.nextLine();
+				
+				for (BankAccount names:accounts) {
+					
+					if (names.getName().equals(name)) {
+						System.out.println("The account number is"+names.getAccountNum());
+						didSomething = true;
+					}
+					else if (name.toLowerCase().equals("c")) {
+						didSomething = true;
+					}
+				}
+				}
+			}
+			
+			
+			
 			System.out.println("Account Number(Transferree):");
 			straccountnumber = in.nextLine();	
 		}
 		
 		accNumD = (int) Double.parseDouble(straccountnumber);
 		in.nextLine();
-		
+		//For parsing
 		String stramount;
+		
 		double amount;
 		System.out.println("Amount:");
 		stramount = in.nextLine();
+		
 		while (!isNumeric(stramount)) {
 			System.out.println("Amount:");
 			stramount = in.nextLine();	
@@ -247,10 +359,11 @@ public class Main {
 		
 		for (BankAccount depositor:accounts) {
 			
+			//Finds depositor
 			if (depositor.getAccountNum() == accNumD) {
+				//finds withdrawer
 				for (BankAccount transfer:accounts) {
 					if (transfer.getAccountNum() == accNumW) {
-						//Try catch this
 						try { transfer.transfer(depositor, amount); }
 						
 						catch (IllegalArgumentException e) {
@@ -269,12 +382,22 @@ public class Main {
 		}
 		
 		else if (transponse.toLowerCase().equals("g")){
+			
+			boolean didSomething = false;
 			System.out.println("Getting account numbers:");
-			System.out.print("Name:");
+			
+			//help loop but you don't need to mess up to get to it
+			System.out.print("(C) to cancel, Name:");
 			String name = in.nextLine();
 			for (BankAccount list:accounts) {
 				if (list.getName().equals(name)) {
 				System.out.println("The account number is:"+ list.getAccountNum());
+				didSomething = true;
+				}
+				else if (name.toLowerCase().equals("c")) {
+					didSomething = true;
+							
+				
 			}
 			
 		}
@@ -295,13 +418,7 @@ public class Main {
 		
 		
 		
-		
-		
-		
-		//Make sure that you catch ALL exceptions.  
-		//Regardless of the data entered by the user at any prompt, your program should not crash and should respond appropriately to undesired input values.
-		//For example, if you ask a yes or no question, the only accepted responses should be some variation of yes or no.   
-		
+		//To keep things in run variable loop a terminate variable is used
 		if (!terminate) {
 		System.out.print("Want to make another action? (Y/N)");
 		String runsponse = in.nextLine();
@@ -310,9 +427,11 @@ public class Main {
 			 runsponse = in.nextLine();
 		}
 		if (runsponse.toUpperCase().equals("N")) {
+			//To get out of run loop "N" must be entered
 			run = false;
 		}
 		else {
+			//if N isn't entered, it runs
 			run = true;
 		}
 		
@@ -337,6 +456,7 @@ public class Main {
 				return false;
 			}
 	}
+
 
 }
 
